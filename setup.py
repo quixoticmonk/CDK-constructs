@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="lib",
+    name="testconstructs",
     version="0.0.1",
 
     author="Manu Chandrasekhar",
