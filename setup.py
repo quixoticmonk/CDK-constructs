@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="test_git",
+    name="cdk_constructs",
     version="0.0.1",
 
     author="Manu Chandrasekhar",
