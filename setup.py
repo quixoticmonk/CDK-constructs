@@ -1,7 +1,7 @@
 import setuptools
 
 setuptools.setup(
-    name="cdk_constructs",
+    name="lib",
     version="0.0.1",
 
     author="Manu Chandrasekhar",
