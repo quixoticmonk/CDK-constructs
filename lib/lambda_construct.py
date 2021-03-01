@@ -58,7 +58,7 @@ class LambdaConstruct(core.Construct):
             retry_attempts=fn["fn_retry_attempts"],
             timeout=Duration.seconds(fn["fn_timeout"]),
             reserved_concurrent_executions=fn["fn_reserved_concurrency"]
-            # role=submit_vaccine_reg_lambda_role
+
         )
 
         lambda_fn_alias = lambda_fn.current_version.add_alias(fn["fn_alias"])
