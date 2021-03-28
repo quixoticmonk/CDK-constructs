@@ -6,8 +6,8 @@ setuptools.setup(
 
     author="Manu Chandrasekhar",
 
-    package_dir={"": "lib"},
-    packages=setuptools.find_packages(where="lib"),
+    package_dir={"lib": "lib"},
+    packages=setuptools.find_packages(),
         install_requires=[
         "aws-cdk.core==1.91.0",
         "aws-cdk.core==1.91.0",
