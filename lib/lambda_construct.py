@@ -25,8 +25,6 @@ class LambdaConstruct(core.Construct):
                                    fn["fn_dlq_name"],
                                    queue_name=fn["fn_dlq_name"])
 
-        # lambda function - Recaptcha
-
         lambda_fn = Function(
             self,
             fn["fn_name"],

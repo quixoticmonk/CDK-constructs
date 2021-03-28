@@ -109,12 +109,12 @@ class ApiLambdaIntegationRestConstruct(core.Construct):
         # Setting passthrough behavior
         pass_context = gw["gw_passthrough_behavior"]
 
-        passthroughBehavior = PassthroughBehavior.WHEN_NO_TEMPLATES if pass_context == "WHEN_NO_TEMPLATES" else PassthroughBehavior.WHEN_NO_MATCH if pass_context == "WHEN_NO_MATCH" else PassthroughBehavior.NEVER
+        passthrough_behavior = PassthroughBehavior.WHEN_NO_TEMPLATES if pass_context == "WHEN_NO_TEMPLATES" else PassthroughBehavior.WHEN_NO_MATCH if pass_context == "WHEN_NO_MATCH" else PassthroughBehavior.NEVER
 
         lambda_integration = _api_gw.LambdaIntegration(
             lambda_fn_alias,
             proxy=False,
-            passthrough_behavior=passthroughBehavior,
+            passthrough_behavior=passthrough_behavior,
         )
 
         gateway_root_resource = gateway.root.add_resource(
