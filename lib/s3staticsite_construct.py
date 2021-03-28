@@ -1,30 +1,15 @@
+from aws_cdk import (core, aws_s3 as _s3, aws_iam as _iam, aws_cloudfront as
+                     _cfront, aws_cloudfront_origins as _cfront_origins)
 
-
-from aws_cdk import (
-    core,
-    aws_s3 as _s3,
-    aws_lambda as _lambda,
-    aws_apigateway as _gw,
-    aws_lambda_event_sources as _lambda_event,
-    aws_iam as _iam,
-    aws_dynamodb as _ddb,
-    aws_cloudfront as _cfront,
-    aws_cloudfront_origins as _cfront_origins
-)
-
-from aws_cdk.aws_cloudfront import (
-    CfnCloudFrontOriginAccessIdentity,
-    PriceClass,
-    SecurityPolicyProtocol,
-    GeoRestriction,
-    AllowedMethods,
-    ViewerProtocolPolicy
-)
+from aws_cdk.aws_cloudfront import (CfnCloudFrontOriginAccessIdentity,
+                                    PriceClass, SecurityPolicyProtocol,
+                                    GeoRestriction, AllowedMethods,
+                                    ViewerProtocolPolicy)
 
 
 class S3StaticSiteConstruct(core.Construct):
-
-    def __init__(self, scope: core.Construct, construct_id: str, ss_context: str, **kwargs) -> None:
+    def __init__(self, scope: core.Construct, construct_id: str,
+                 ss_context: str, **kwargs) -> None:
         super().__init__(scope, construct_id, **kwargs)
 
         # Access logging bucket for the S3 and Cloudfront
@@ -33,15 +18,15 @@ class S3StaticSiteConstruct(core.Construct):
 
         allowed_methods = AllowedMethods.ALLOW_GET_HEAD if ss[
             "cfront_allowed_methods"] == "ALLOW_GET_HEAD" else AllowedMethods.ALLOW_GET_HEAD_OPTIONS if ss[
-            "cfront_allowed_methods"] == "ALLOW_GET_HEAD_OPTIONS" else AllowedMethods.ALLOW_ALL
+                "cfront_allowed_methods"] == "ALLOW_GET_HEAD_OPTIONS" else AllowedMethods.ALLOW_ALL
 
         viewer_policy = ViewerProtocolPolicy.REDIRECT_TO_HTTPS if ss[
             "cfront_viewer_policy"] == "REDIRECT_TO_HTTPS" else ViewerProtocolPolicy.HTTPS_ONLY if ss[
-            "cfront_viewer_policy"] == "HTTPS_ONLY" else ViewerProtocolPolicy.ALLOW_ALL
+                "cfront_viewer_policy"] == "HTTPS_ONLY" else ViewerProtocolPolicy.ALLOW_ALL
 
         price_class = PriceClass.PRICE_CLASS_ALL if ss[
             "cfront_price_class"] == "PRICE_CLASS_ALL" else PriceClass.PRICE_CLASS_200 if ss[
-            "cfront_price_class"] == "PRICE_CLASS_200" else PriceClass.PRICE_CLASS_100
+                "cfront_price_class"] == "PRICE_CLASS_200" else PriceClass.PRICE_CLASS_100
 
         # Creating the access logs bucket
 
@@ -65,7 +50,7 @@ class S3StaticSiteConstruct(core.Construct):
             auto_delete_objects=True,
             versioned=True,
             website_index_document=ss["website_index_document"],
-            website_error_document=ss["website_index_document"]        )
+            website_error_document=ss["website_index_document"])
 
         bucket_origins = _cfront_origins.S3Origin(source_bucket)
 
@@ -76,8 +61,7 @@ class S3StaticSiteConstruct(core.Construct):
             "accessOriginOAI",
             cloud_front_origin_access_identity_config={
                 "comment": ss["cfront_origins_comment"]
-            }
-        )
+            })
 
         cfront_dist = _cfront.Distribution(
             self,
@@ -97,8 +81,7 @@ class S3StaticSiteConstruct(core.Construct):
             log_file_prefix=ss["cfront_log_file_prefix"],
             # web_acl_id=,
             # certificate=,
-            geo_restriction=GeoRestriction.whitelist(
-                ss["geo_whitelist"]),
+            geo_restriction=GeoRestriction.whitelist(ss["geo_whitelist"]),
         )
 
         # Bucket policy to restrict access to bucket - Use only cloudfront's Origin Access identity
@@ -114,11 +97,12 @@ class S3StaticSiteConstruct(core.Construct):
 
         # Outputs
 
-        core.CfnOutput(self, "CloudfrontDistribution", value=(
-            cfront_dist.distribution_domain_name))
-        core.CfnOutput(self, "BucketArn",
-                       value=(source_bucket.bucket_arn))
-        core.CfnOutput(self, "LoggingBucketArn",
+        core.CfnOutput(self,
+                       "CloudfrontDistribution",
+                       value=(cfront_dist.distribution_domain_name))
+        core.CfnOutput(self, "BucketArn", value=(source_bucket.bucket_arn))
+        core.CfnOutput(self,
+                       "LoggingBucketArn",
                        value=(access_log_bucket.bucket_arn))
 
         self.bucket = source_bucket
@@ -131,8 +115,8 @@ class S3StaticSiteConstruct(core.Construct):
 
     @property
     def main_access_logs_bucket(self) -> _s3.IBucket:
-        return self.access_logs_bucket    
+        return self.access_logs_bucket
 
     @property
     def main_cfront_dist(self) -> _cfront.IDistribution:
-        return self.cfront_dist 
+        return self.cfront_dist
